@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Todas las recetas{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Recetas disponibles</h1>
+<div class="cards-grid">
+  {% for receta in recetas %}
+    {% include 'receta_card.html' %}
+  {% endfor %}
+</div>
+{% endblock %}

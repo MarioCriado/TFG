@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Mis Recetas{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Mis Recetas</h1>
+<a href="{{ url_for('main.anadir_receta') }}" class="btn btn-sm">Añadir receta</a>
+<div class="cards-grid">
+  {% for receta in mis_recetas %}
+    {% include 'receta_card.html' %}
+  {% endfor %}
+</div>
+{% endblock %}

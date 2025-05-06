@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}{{ receta.titulo }}{% endblock %}
+
+{% block content %}
+<section class="recipe-detail">
+  <div class="recipe-image">
+    {% if receta.imagen_filename %}
+      <img src="{{ url_for('static', filename='images/' ~ receta.imagen_filename) }}"
+           alt="Imagen de {{ receta.titulo }}">
+    {% endif %}
+  </div>
+
+  <div class="recipe-info">
+    <h1 class="recipe-title">{{ receta.titulo }}</h1>
+
+    <div class="recipe-meta">
+      <div class="meta-item">
+        <svg width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="var(--accent)" fill="none" stroke-width="2"/><line x1="12" y1="6" x2="12" y2="12" stroke="var(--accent)" stroke-width="2"/><line x1="12" y1="12" x2="16" y2="14" stroke="var(--accent)" stroke-width="2"/></svg>
+        <span>{{ receta.tiempo }} min</span>
+      </div>
+      <div class="meta-item">
+        <svg width="20" height="20" viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 17,14 18.5,21 12,17 5.5,21 7,14 2,9 9,9" fill="var(--accent)"/></svg>
+        <span>{{ receta.dificultad }}/10</span>
+      </div>
+      {% if receta.etiquetas %}
+      <div class="meta-item etiquetas">
+        {% for tag in receta.etiquetas.split(',') %}
+          <span class="tag">{{ tag.strip() }}</span>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+
+    {% if receta.descripcion %}
+      <p class="recipe-description">{{ receta.descripcion }}</p>
+    {% endif %}
+
+    <h2>Ingredientes</h2>
+    <ul class="ingredient-list">
+      {% for ing in receta.ingredientes.split(',') %}
+        <li>{{ ing.strip() }}</li>
+      {% endfor %}
+    </ul>
+
+    <h2>Proceso de elaboración</h2>
+    <div class="process">
+      <p style="white-space: pre-wrap;">{{ receta.proceso }}</p>
+    </div>
+
+    <a href="{{ url_for('main.index') }}" class="btn">Volver</a>
+  </div>
+</section>
+{% endblock %}
