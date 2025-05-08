@@ -24,59 +24,89 @@
             />
           </a>
           <nav class="nav-menu">
-            <a href="{{ url_for('main.index') }}"
-               class="nav-link {% if request.endpoint == 'main.index' %}active{% endif %}">
+            <a
+              href="{{ url_for('main.index') }}"
+              class="nav-link {% if request.endpoint == 'main.index' %}active{% endif %}"
+            >
               Recetas
             </a>
-            <a href="{{ url_for('main.favoritos') }}"
-               class="nav-link {% if request.endpoint == 'main.favoritos' %}active{% endif %}">
+            <a
+              href="{{ url_for('main.favoritos') }}"
+              class="nav-link {% if request.endpoint == 'main.favoritos' %}active{% endif %}"
+            >
               Favoritos
             </a>
-            <a href="{{ url_for('main.mis_recetas') }}"
-               class="nav-link {% if request.endpoint == 'main.mis_recetas' %}active{% endif %}">
+            <a
+              href="{{ url_for('main.mis_recetas') }}"
+              class="nav-link {% if request.endpoint == 'main.mis_recetas' %}active{% endif %}"
+            >
               Mis recetas
             </a>
           </nav>
         </div>
-    
+
         <div class="right-items">
-          <button id="theme-toggle" class="theme-toggle" aria-label="Cambiar tema">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon-sun" viewBox="0 0 24 24">
+          <button
+            id="theme-toggle"
+            class="theme-toggle"
+            aria-label="Cambiar tema"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="icon-sun"
+              viewBox="0 0 24 24"
+            >
               <circle cx="12" cy="12" r="5" fill="var(--accent)" />
               <g stroke="var(--accent)" stroke-width="2">
-                <line x1="12" y1="1" x2="12" y2="3"/>
-                <line x1="12" y1="21" x2="12" y2="23"/>
-                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-                <line x1="1" y1="12" x2="3" y2="12"/>
-                <line x1="21" y1="12" x2="23" y2="12"/>
-                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                <line x1="12" y1="1" x2="12" y2="3" />
+                <line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" />
+                <line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
               </g>
             </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon-moon" viewBox="0 0 24 24">
-              <path fill="var(--accent)"
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="icon-moon"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill="var(--accent)"
                 d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 1 0 9.79 9.79z"
               />
             </svg>
           </button>
-    
+
           {% if current_user %}
-            <span class="user-greeting">
-              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" id="avatar">
-                <path d="M24 8c-4.42 0-8 3.58-8 8 0 4.41 3.58 8 8 8s8-3.59 8-8c0-4.42-3.58-8-8-8zm0 20c-5.33 0-16 2.67-16 8v4h32v-4c0-5.33-10.67-8-16-8z"></path>
-                <path fill="none" d="M0 0h48v48H0z"></path>
-              </svg>
-              {{ current_user.username }}
-            </span>
-            <a href="{{ url_for('main.cerrar_sesion') }}" class="btn btn-sm">Cerrar sesión</a>
+          <span class="user-greeting">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="48"
+              height="48"
+              id="avatar"
+            >
+              <path
+                d="M24 8c-4.42 0-8 3.58-8 8 0 4.41 3.58 8 8 8s8-3.59 8-8c0-4.42-3.58-8-8-8zm0 20c-5.33 0-16 2.67-16 8v4h32v-4c0-5.33-10.67-8-16-8z"
+              ></path>
+              <path fill="none" d="M0 0h48v48H0z"></path>
+            </svg>
+            {{ current_user.username }}
+          </span>
+          <a href="{{ url_for('main.cerrar_sesion') }}" class="btn btn-sm"
+            >Cerrar sesión</a
+          >
           {% else %}
-            <a href="{{ url_for('main.iniciar_sesion') }}" class="btn btn-sm">Iniciar sesión</a>
+          <a href="{{ url_for('main.iniciar_sesion') }}" class="btn btn-sm"
+            >Iniciar sesión</a
+          >
           {% endif %}
         </div>
       </div>
     </header>
-    
+
     <div class="container">
       {% with mensajes = get_flashed_messages() %} {% if mensajes %}
       <div class="alert alert-success">{{ mensajes[0] }}</div>

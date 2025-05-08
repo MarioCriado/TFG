@@ -2,7 +2,24 @@
 {% block title %}Todas las recetas{% endblock %}
 
 {% block content %}
-<h1 class="mb-4">Recetas disponibles</h1>
+<div class="title">
+  <h1 class="mb-4">Recetas disponibles</h1>
+  <div class="client-filters" style="display:flex; gap:50px; margin-bottom:20px; flex-wrap:wrap;">
+    <div style="flex:1; min-width:150px;">
+      <label for="sort">Ordenar por:</label>
+      <select id="sort" class="form-control">
+        <option value="">Sin ordenar</option>
+        <option value="abc">A-Z</option>
+        <option value="diff">Dificultad ↑</option>
+        <option value="time">Tiempo ↑</option>
+      </select>
+    </div>
+    <div style="flex:1; min-width:150px;">
+      <label for="filter-tag">Filtrar por etiqueta:</label>
+      <input type="text" id="filter-tag" class="form-control" placeholder="Escribe etiqueta">
+    </div>
+  </div>
+</div>
 <div class="cards-grid">
   {% for receta in recetas %}
     {% include 'receta_card.html' %}

@@ -139,7 +139,8 @@ def mis_recetas():
     if g.user is None:
         flash('Necesitas iniciar sesión para ver tus recetas.', 'error')
         return redirect(url_for('main.iniciar_sesion'))
-    recetas = g.user.mis_recetas
+
+    recetas = Receta.query.filter_by(autor_id=g.user.id).all()
     return render_template('mis_recetas.html', recetas=recetas)
 
 @main_bp.route('/toggle_favorito/<int:receta_id>', methods=['POST'])

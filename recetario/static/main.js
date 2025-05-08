@@ -100,7 +100,6 @@ document.querySelectorAll(".btn-fav").forEach((btn) => {
         btn.classList.add("favorited");
       } else {
         btn.classList.remove("favorited");
-        // Si estamos en /favoritos y quitamos uno, borramos la card
         if (window.location.pathname.includes("/favoritos")) {
           btn.closest(".card").remove();
         }
@@ -109,4 +108,45 @@ document.querySelectorAll(".btn-fav").forEach((btn) => {
       console.error(err);
     }
   });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const sortSelect = document.getElementById("sort");
+  const tagInput = document.getElementById("filter-tag");
+  const grid = document.querySelector(".cards-grid");
+  const allCards = Array.from(grid.querySelectorAll(".card"));
+
+  function applyClientFilters() {
+    const sortBy = sortSelect.value;
+    const tag = tagInput.value.trim().toLowerCase();
+
+    let filtered = allCards.filter((card) => {
+      if (!tag) return true;
+      const tags = card.dataset.etiquetas.toLowerCase().split(",");
+      return tags.some((t) => t.trim().includes(tag));
+    });
+
+    filtered.sort((a, b) => {
+      if (sortBy === "abc") {
+        return a.dataset.title.localeCompare(b.dataset.title);
+      }
+      if (sortBy === "diff") {
+        return (
+          parseFloat(a.dataset.dificultad) - parseFloat(b.dataset.dificultad)
+        );
+      }
+      if (sortBy === "time") {
+        return parseInt(a.dataset.tiempo) - parseInt(b.dataset.tiempo);
+      }
+      return 0;
+    });
+
+    grid.innerHTML = "";
+    filtered.forEach((card) => grid.appendChild(card));
+  }
+
+  sortSelect.addEventListener("change", applyClientFilters);
+  tagInput.addEventListener("input", applyClientFilters);
+
+  applyClientFilters();
 });
