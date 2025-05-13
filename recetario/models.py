@@ -20,6 +20,13 @@ class Receta(db.Model):
     autor_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=True)
     creador = db.relationship('Usuario', back_populates='mis_recetas')
 
+    comentarios = db.relationship(
+        'Comentario',
+        back_populates='receta',
+        cascade='all, delete-orphan',
+        lazy='dynamic'
+    )
+
 class Usuario(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
@@ -38,3 +45,13 @@ class Usuario(db.Model):
         back_populates='creador',
         lazy='dynamic'
     )
+
+class Comentario(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    receta_id = db.Column(db.Integer, db.ForeignKey('receta.id'), nullable=False)
+    usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
+    contenido = db.Column(db.Text, nullable=False)
+    fecha     = db.Column(db.DateTime, server_default=db.func.now(), nullable=False)
+
+    receta = db.relationship('Receta', back_populates='comentarios')
+    autor  = db.relationship('Usuario')

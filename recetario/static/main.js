@@ -150,3 +150,72 @@ document.addEventListener("DOMContentLoaded", () => {
 
   applyClientFilters();
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const section = document.querySelector(".recipe-detail");
+  if (!section) return;
+
+  const recetaId = section.dataset.id;
+
+  const btnAdd    = document.getElementById("btn-add-comment");
+  const modal     = document.getElementById("comment-modal");
+  const close     = document.getElementById("modal-close");
+  const submit    = document.getElementById("modal-submit");
+  const textarea  = document.getElementById("comment-text");
+  const list      = document.getElementById("comments-list");
+
+  if (!btnAdd || !modal) return;
+
+  btnAdd.addEventListener("click", () => {
+    modal.style.display = "flex";
+    textarea.focus();
+  });
+  close.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
+  window.addEventListener("click", (e) => {
+    if (e.target === modal) modal.style.display = "none";
+  });
+
+  submit.addEventListener("click", async () => {
+    const contenido = textarea.value.trim();
+    if (!contenido) {
+      alert("El comentario no puede estar vacío");
+      return;
+    }
+    try {
+      const res = await fetch(`/receta/${recetaId}/comentario`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ contenido }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Error al enviar el comentario");
+        return;
+      }
+      if (
+        list.children.length === 1 &&
+        list.children[0].textContent.includes("No hay comentarios")
+      ) {
+        list.innerHTML = "";
+      }
+      const li = document.createElement("li");
+      li.dataset.id = data.id;
+      li.style.borderBottom = "1px solid var(--border)";
+      li.style.padding = "8px 0";
+      li.innerHTML = `
+        <small style="color:var(--text); font-size:14px;">
+          <strong>${data.username}</strong> &bull; ${data.fecha}
+        </small>
+        <p style="margin:4px 0 0;">${data.contenido}</p>
+      `;
+      list.appendChild(li);
+      textarea.value = "";
+      modal.style.display = "none";
+    } catch (err) {
+      console.error(err);
+      alert("No se pudo enviar el comentario");
+    }
+  });
+});

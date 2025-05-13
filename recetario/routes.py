@@ -6,7 +6,7 @@ from flask import (
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
-from .models import Receta, Usuario, usuario_receta
+from .models import Receta, Usuario, usuario_receta, Comentario
 
 main_bp = Blueprint('main', __name__)
 
@@ -71,6 +71,32 @@ def anadir_receta():
 def detalle_receta(receta_id):
     receta = Receta.query.get_or_404(receta_id)
     return render_template('detalle_receta.html', receta=receta)
+
+@main_bp.route('/receta/<int:receta_id>/comentario', methods=['POST'])
+def anadir_comentario(receta_id):
+    if g.user is None:
+        return jsonify({'error': 'login_required'}), 401
+
+    data = request.get_json() or {}
+    contenido = (data.get('contenido') or '').strip()
+    if not contenido:
+        return jsonify({'error': 'El comentario no puede estar vacío'}), 400
+
+    receta = Receta.query.get_or_404(receta_id)
+    comentario = Comentario(
+        receta=receta,
+        contenido=contenido,
+        usuario_id=g.user.id
+    )
+    db.session.add(comentario)
+    db.session.commit()
+
+    return jsonify({
+        'id': comentario.id,
+        'contenido': comentario.contenido,
+        'fecha': comentario.fecha.strftime('%Y-%m-%d %H:%M'),
+        'username': g.user.username
+    }), 201
 
 @main_bp.route('/registro', methods=['GET', 'POST'])
 def registro():

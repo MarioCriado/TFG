@@ -2,7 +2,7 @@
 {% block title %}{{ receta.titulo }}{% endblock %}
 
 {% block content %}
-<section class="recipe-detail">
+<section class="recipe-detail" data-id="{{ receta.id }}">
   <div class="recipe-image">
     {% if receta.imagen_filename %}
       <img src="{{ url_for('static', filename='images/' ~ receta.imagen_filename) }}"
@@ -48,6 +48,41 @@
     </div>
 
     <a href="{{ url_for('main.index') }}" class="btn">Volver</a>
+    <div class="comments-section" style="margin-top: 30px;">
+      <h2>Comentarios</h2>
+      <button id="btn-add-comment" class="btn btn-sm" type="button">Añadir comentario</button>
+      <ul id="comments-list">
+        {% for c in receta.comentarios %}
+          <li data-id="{{ c.id }}">
+            <small>
+              <strong>{{ c.autor.username }}</strong> &bull; {{ c.fecha.strftime('%Y-%m-%d %H:%M') }}
+            </small>
+            <p>{{ c.contenido }}</p>
+          </li>
+        {% else %}
+          <li>No hay comentarios aún.</li>
+        {% endfor %}
+      </ul>
+    </div>
   </div>
 </section>
+
+<div id="comment-modal" class="modal" style="
+     display:none; position:fixed; top:0; left:0; right:0; bottom:0;
+     background:rgba(0,0,0,0.6); align-items:center; justify-content:center; z-index:1000;">
+  <div class="modal-content" style="
+       background:var(--card-bg); padding:20px; border-radius:6px;
+       max-width:400px; width:90%; position:relative;">
+    <span id="modal-close" class="modal-close" style="
+         position:absolute; top:10px; right:12px; font-size:24px; cursor:pointer; color:var(--text);">
+      &times;
+    </span>
+    <h3 style="margin-top:0; color:var(--accent);">Nuevo comentario</h3>
+    <textarea id="comment-text" rows="4" style="
+         width:100%; padding:8px; border:1px solid var(--border);
+         border-radius:4px; background:var(--input-bg); color:var(--text);
+         resize:vertical;" placeholder="Escribe tu comentario..."></textarea>
+    <button id="modal-submit" class="btn" style="margin-top:10px;">Enviar</button>
+  </div>
+</div>
 {% endblock %}
