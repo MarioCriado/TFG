@@ -55,3 +55,13 @@ class Comentario(db.Model):
 
     receta = db.relationship('Receta', back_populates='comentarios')
     autor  = db.relationship('Usuario')
+
+class Ingrediente(db.Model):
+    __tablename__ = 'ingrediente'
+    id              = db.Column(db.Integer, primary_key=True)
+    nombre          = db.Column(db.String(100), unique=True, nullable=False)
+    precio          = db.Column(db.Numeric(precision=8, scale=2), nullable=False)
+    imagen_filename = db.Column(db.String(100), nullable=True)
+
+    def __repr__(self):
+        return f"<Ingrediente {self.nombre} - {self.precio}€>"

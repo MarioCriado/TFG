@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}Ingredientes Disponibles{% endblock %}
+
+{% block content %}
+  <div class="page-header-with-cart">
+    <h1 class="page-title">Ingredientes disponibles</h1>
+    <button id="cart-toggle" class="btn-cart">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path fill="var(--accent)" d="M7 4h-2l-1 2h2l1-2zm0 0"/>
+        <path d="M7 18c-1.104 0-1.99.896-1.99 2S5.896 22 7 22s2-.896 2-2s-.896-2-2-2zM17 18c-1.104 0-1.99.896-1.99 2s.886 2 1.99 2s2-.896 2-2s-.896-2-2-2zM6.16 6l.84 4h10l3.23-6H5.21L4.27 2H1v2h2l3.6 7.59L5.25 17H19v-2H6.42l.38-2H19v-2H7.53l-.37-2H17V6H6.16z"/>
+      </svg>
+      <span id="cart-count" class="cart-count">0</span>
+    </button>
+  </div>
+
+  {% if ingredientes %}
+    <div class="cards-grid ingredientes-grid">
+      {% for ing in ingredientes %}
+      <div class="card ing-card" data-id="{{ ing.id }}" data-nombre="{{ ing.nombre }}" data-precio="{{ ing.precio }}">
+        {% if ing.imagen_filename %}
+          <img src="{{ url_for('static', filename='images/' ~ ing.imagen_filename) }}"
+               alt="{{ ing.nombre }}" class="card-img ing-thumb">
+        {% else %}
+          <div class="card-img ing-thumb placeholder"></div>
+        {% endif %}
+        <div class="card-body">
+          <h2 class="ing-name">{{ ing.nombre }}</h2>
+          <p class="ing-price">{{ ing.precio }} €</p>
+          <button type="button" class="btn btn-sm btn-add-ing" data-id="{{ ing.id }}">
+            Añadir al carrito
+          </button>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="no-ingredients">No hay ingredientes disponibles.</p>
+  {% endif %}
+
+  <aside id="cart-sidebar" class="cart-sidebar">
+    <div class="cart-header">
+      <h3>Tu carrito</h3>
+      <button id="cart-close" class="cart-close">&times;</button>
+    </div>
+    <ul id="cart-items" class="cart-items"></ul>
+    <div class="cart-footer">
+      <p>Total: <span id="cart-total">0.00</span> €</p>
+      <button id="cart-confirm" class="btn">Confirmar pedido</button>
+    </div>
+  </aside>
+{% endblock %}

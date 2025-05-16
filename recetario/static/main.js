@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
     grupo.innerHTML = `
         <input type="text" name="ingredientes" class="form-control"
                placeholder="Ej: 1 cuchara de aceite" required>
-        <button type="button" class="btn btn-danger btn-eliminar-ing">×</button>
+        <button type="button" class="btn btn-danger btn-eliminar-ing">x</button>
       `;
     listaIngs.appendChild(grupo);
   });
@@ -218,4 +218,113 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("No se pudo enviar el comentario");
     }
   });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  function showToast(msg) {
+    const container = document.getElementById("toast-container");
+    const t = document.createElement("div");
+    t.className = "toast";
+    t.textContent = msg;
+    container.appendChild(t);
+    setTimeout(() => t.remove(), 3000);
+  }
+
+  const btnToggle = document.getElementById("cart-toggle");
+  const sidebar   = document.getElementById("cart-sidebar");
+  const btnClose  = document.getElementById("cart-close");
+  const countEl   = document.getElementById("cart-count");
+  const itemsEl   = document.getElementById("cart-items");
+  const totalEl   = document.getElementById("cart-total");
+  const btnConfirm= document.getElementById("cart-confirm");
+
+  if (!sidebar) return;
+
+  let carrito = JSON.parse(localStorage.getItem("cart")) || {};
+
+  function saveCart() {
+    localStorage.setItem("cart", JSON.stringify(carrito));
+    renderCart();
+  }
+
+  function renderCart() {
+    itemsEl.innerHTML = "";
+    let total = 0, countItems = 0;
+    for (const id in carrito) {
+      const item = carrito[id];
+      countItems++;
+      total += item.precio * item.cantidad;
+
+      const li = document.createElement("li");
+      const info = document.createElement("div");
+      info.className = "item-info";
+      info.textContent = `${item.nombre} - ${(item.precio * item.cantidad).toFixed(2)} €`;
+
+      const qty = document.createElement("div");
+      qty.className = "qty-controls";
+      const btnDec = document.createElement("button"); btnDec.textContent = "-";
+      const spanQ = document.createElement("span"); spanQ.textContent = item.cantidad;
+      const btnInc = document.createElement("button"); btnInc.textContent = "+";
+      qty.append(btnDec, spanQ, btnInc);
+
+      const btnRem = document.createElement("button");
+      btnRem.className = "remove-item";
+      btnRem.innerHTML = "&times;";
+
+      btnInc.addEventListener("click", () => {
+        item.cantidad++;
+        saveCart();
+      });
+      btnDec.addEventListener("click", () => {
+        if (item.cantidad > 1) {
+          item.cantidad--;
+        } else {
+          delete carrito[id];
+        }
+        saveCart();
+      });
+      btnRem.addEventListener("click", () => {
+        delete carrito[id];
+        saveCart();
+      });
+
+      li.append(info, qty, btnRem);
+      itemsEl.appendChild(li);
+    }
+
+    countEl.textContent = countItems;
+    totalEl.textContent = total.toFixed(2);
+  }
+
+  document.querySelectorAll(".btn-add-ing").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const card = btn.closest(".ing-card");
+      const id     = card.dataset.id;
+      const nombre = card.dataset.nombre;
+      const precio = parseFloat(card.dataset.precio);
+
+      if (!carrito[id]) {
+        carrito[id] = { id, nombre, precio, cantidad: 0 };
+      }
+      carrito[id].cantidad++;
+      saveCart();
+      showToast(`“${nombre}” añadido al carrito`);
+    });
+  });
+
+  btnToggle.addEventListener("click", () => sidebar.classList.toggle("open"));
+  btnClose.addEventListener("click", () => sidebar.classList.remove("open"));
+
+  btnConfirm.addEventListener("click", () => {
+    if (!Object.keys(carrito).length) {
+      showToast("El carrito está vacío");
+      return;
+    }
+    sidebar.classList.remove("open");
+    showToast("Pedido confirmado. ¡Gracias!");
+    carrito = {};
+    saveCart();
+  });
+
+  renderCart();
 });

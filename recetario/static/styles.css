@@ -522,3 +522,257 @@ footer {
 .recipe-info > .btn {
   margin-top: 10px;
 }
+
+.ingredientes-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  margin-top: 1rem;
+}
+
+.ing-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.ing-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+}
+
+.ing-thumb {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.ing-thumb.placeholder {
+  background: #333;
+}
+
+.ing-card .card-body {
+  padding: 12px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.ing-name {
+  margin: 0 0 8px;
+  font-size: 18px;
+  color: var(--accent);
+}
+.ing-price {
+  margin: 0 0 12px;
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--text);
+}
+
+.btn-add-ing {
+  background: var(--accent);
+  color: var(--btn-text);
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  align-self: start;
+}
+
+.btn-add-ing:hover {
+  background-color: #ffd54f;
+}
+
+.page-header-with-cart {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.btn-cart {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-cart svg {
+  fill: var(--accent);
+  width: 28px;
+  height: 28px;
+}
+
+.cart-count {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: red;
+  color: #fff;
+  font-size: 12px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cart-sidebar {
+  position: fixed;
+  top: 0;
+  right: -320px;
+  width: 300px;
+  height: 100%;
+  background: var(--card-bg);
+  border-left: 2px solid var(--border);
+  box-shadow: -4px 0 8px rgba(0, 0, 0, 0.5);
+  transition: right 0.3s;
+  display: flex;
+  flex-direction: column;
+  z-index: 2000;
+}
+
+.cart-sidebar.open {
+  right: 0;
+}
+
+.cart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.cart-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--text);
+}
+
+.cart-items {
+  flex: 1;
+  list-style: none;
+  padding: 10px;
+  margin: 0;
+  overflow-y: auto;
+}
+
+.cart-items li {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.cart-footer {
+  padding: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.cart-footer p {
+  margin: 0 0 10px;
+  font-weight: bold;
+}
+
+.toast-container {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  z-index: 3000;
+}
+
+.toast {
+  background: rgba(50, 50, 50, 0.9);
+  color: #fff;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  animation: fadein 0.3s, fadeout 0.3s 2.7s;
+  max-width: 80vw;
+  text-align: center;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fadeout {
+  to {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+}
+
+.cart-items li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.cart-items li .item-info {
+  flex: 1;
+}
+
+.cart-items li .qty-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-right: 0.5rem;
+}
+
+.cart-items li .qty-controls button {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 1rem;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+}
+
+.cart-items li .qty-controls span {
+  min-width: 24px;
+  text-align: center;
+}
+
+.cart-items li .remove-item {
+  background: none;
+  border: none;
+  color: red;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.cart-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.cart-footer p {
+  margin: 0;
+  font-size: 1rem;
+}

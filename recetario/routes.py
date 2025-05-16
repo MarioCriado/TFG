@@ -6,7 +6,7 @@ from flask import (
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
-from .models import Receta, Usuario, usuario_receta, Comentario
+from .models import Receta, Usuario, usuario_receta, Comentario, Ingrediente
 
 main_bp = Blueprint('main', __name__)
 
@@ -71,6 +71,14 @@ def anadir_receta():
 def detalle_receta(receta_id):
     receta = Receta.query.get_or_404(receta_id)
     return render_template('detalle_receta.html', receta=receta)
+
+@main_bp.route('/ingredientes')
+def ver_ingredientes():
+    if g.user is None:
+        flash('Necesitas iniciar sesión para ver los ingredientes.', 'error')
+        return redirect(url_for('main.iniciar_sesion'))
+    ingredientes = Ingrediente.query.all()
+    return render_template('ingredientes.html', ingredientes=ingredientes)
 
 @main_bp.route('/receta/<int:receta_id>/comentario', methods=['POST'])
 def anadir_comentario(receta_id):
