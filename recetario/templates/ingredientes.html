@@ -2,6 +2,7 @@
 {% block title %}Ingredientes Disponibles{% endblock %}
 
 {% block content %}
+  <!-- Titulo de la sección y svg del carrito -->
   <div class="page-header-with-cart">
     <h1 class="page-title">Ingredientes disponibles</h1>
     <button id="cart-toggle" class="btn-cart">
@@ -13,6 +14,7 @@
     </button>
   </div>
 
+  <!-- Ingredientes agrupados en un grid -->
   {% if ingredientes %}
     <div class="cards-grid ingredientes-grid">
       {% for ing in ingredientes %}
@@ -26,7 +28,7 @@
         <div class="card-body">
           <h2 class="ing-name">{{ ing.nombre }}</h2>
           <p class="ing-price">{{ ing.precio }} €</p>
-          <button type="button" class="btn btn-sm btn-add-ing" data-id="{{ ing.id }}">
+          <button type="button" class="btn btn-add-ing" data-id="{{ ing.id }}">
             Añadir al carrito
           </button>
         </div>
@@ -36,7 +38,8 @@
   {% else %}
     <p class="no-ingredients">No hay ingredientes disponibles.</p>
   {% endif %}
-
+  
+  <!-- Carrito de artículos -->
   <aside id="cart-sidebar" class="cart-sidebar">
     <div class="cart-header">
       <h3>Tu carrito</h3>

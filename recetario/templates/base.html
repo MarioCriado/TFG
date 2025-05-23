@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{% block title %}Recetario{% endblock %}</title>
+    <!-- Enlace a la hoja de estilos externa de Tagify para manejo de etiquetas -->
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css"
@@ -16,36 +17,63 @@
   <body>
     <header>
       <div class="container header-content">
+        <!-- Elementos del lado izquierdo: logotipo y menú de navegación -->
         <div class="left-items">
+          <!-- Logotipo que redirige a la página de inicio -->
           <a href="{{ url_for('main.index') }}" class="logo">
             <img
               src="{{ url_for('static', filename='images/Logotipo.png') }}"
               alt="Recetario Logo"
             />
           </a>
+
+          <!-- Botón menú oculto para escritorio y visible para móvil -->
+          <button id="mobile-menu-toggle" class="hamburger" aria-label="Menú">
+            <span></span><span></span><span></span>
+          </button>
+
+          <!-- Menú de navegación principal -->
           <nav class="nav-menu">
             <a
               href="{{ url_for('main.index') }}"
-              class="nav-link {% if request.endpoint == 'main.index' %}active{% endif %}"
+              class="nav-link {% if request.endpoint=='main.index' %}active{% endif %}"
+              >Recetas</a
             >
-              Recetas
-            </a>
             <a
               href="{{ url_for('main.favoritos') }}"
-              class="nav-link {% if request.endpoint == 'main.favoritos' %}active{% endif %}"
+              class="nav-link {% if request.endpoint=='main.favoritos' %}active{% endif %}"
+              >Favoritos</a
             >
-              Favoritos
-            </a>
             <a
               href="{{ url_for('main.mis_recetas') }}"
-              class="nav-link {% if request.endpoint == 'main.mis_recetas' %}active{% endif %}"
+              class="nav-link {% if request.endpoint=='main.mis_recetas' %}active{% endif %}"
+              >Mis recetas</a
             >
-              Mis recetas
-            </a>
+          </nav>
+
+          <!-- Menú móvil que se muestra al cambiar la vista a dispositivo móvil -->
+          <nav id="mobile-nav" class="mobile-nav">
+            <a
+              href="{{ url_for('main.index') }}"
+              class="nav-link {% if request.endpoint=='main.index' %}active{% endif %}"
+              >Recetas</a
+            >
+            <a
+              href="{{ url_for('main.favoritos') }}"
+              class="nav-link {% if request.endpoint=='main.favoritos' %}active{% endif %}"
+              >Favoritos</a
+            >
+            <a
+              href="{{ url_for('main.mis_recetas') }}"
+              class="nav-link {% if request.endpoint=='main.mis_recetas' %}active{% endif %}"
+              >Mis recetas</a
+            >
           </nav>
         </div>
 
+        <!-- Elementos del lado derecho: alternador de tema y opciones de usuario -->
         <div class="right-items">
+          <!-- Botón para alternar entre temas claro y oscuro -->
           <button
             id="theme-toggle"
             class="theme-toggle"
@@ -80,6 +108,7 @@
             </svg>
           </button>
 
+          <!-- Mostrar información del usuario si está autenticado -->
           {% if current_user %}
           <span class="user-greeting">
             <svg
@@ -95,11 +124,12 @@
             </svg>
             {{ current_user.username }}
           </span>
-          <a href="{{ url_for('main.cerrar_sesion') }}" class="btn btn-sm"
+          <a href="{{ url_for('main.cerrar_sesion') }}" class="btn"
             >Cerrar sesión</a
           >
           {% else %}
-          <a href="{{ url_for('main.iniciar_sesion') }}" class="btn btn-sm"
+          <!-- Si no está autenticado, se muestra la opción de iniciar sesión -->
+          <a href="{{ url_for('main.iniciar_sesion') }}" class="btn"
             >Iniciar sesión</a
           >
           {% endif %}
@@ -107,16 +137,24 @@
       </div>
     </header>
 
-    <div class="container">
-      {% with mensajes = get_flashed_messages() %} {% if mensajes %}
-      <div class="alert alert-success">{{ mensajes[0] }}</div>
-      {% endif %} {% endwith %} {% block content %}{% endblock %}
+    <!-- Contenedor de mensajes flash -->
+    <div id="toast-container" class="toast-container">
+      {% with mensajes = get_flashed_messages(with_categories=true) %} 
+      {% for category, mensaje in mensajes %}
+      <div class="toast {{ category }}">{{ mensaje }}</div>
+      {% endfor %} 
+      {% endwith %}
     </div>
 
-    <footer class="text-center py-4">
-      &copy; {{ current_year }} Recetario
-    </footer>
-    <div id="toast-container" class="toast-container"></div>
+    <div class="container">{% block content %}{% endblock %}</div>
+
+    <footer>&copy; {{ current_year }} Recetario</footer>
+
+    <!-- Variables globales y scripts necesarios -->
+    <script>
+      window.CURRENT_USER =
+        "{{ current_user.username if current_user else '' }}";
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
     <script src="{{ url_for('static', filename='main.js') }}"></script>
   </body>

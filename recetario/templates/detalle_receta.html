@@ -3,23 +3,32 @@
 
 {% block content %}
 <section class="recipe-detail" data-id="{{ receta.id }}">
+  <!-- Carga la imagen de la receta si la encuentra en la carpeta indicada -->
   <div class="recipe-image">
     {% if receta.imagen_filename %}
-      <img src="{{ url_for('static', filename='images/' ~ receta.imagen_filename) }}"
-           alt="Imagen de {{ receta.titulo }}">
+      <img 
+        src="{{ url_for('static', filename='images/' ~ receta.imagen_filename) }}" 
+        alt="Imagen de {{ receta.titulo }}">
     {% endif %}
   </div>
 
   <div class="recipe-info">
     <h1 class="recipe-title">{{ receta.titulo }}</h1>
 
+    <!-- Meta información de la receta -->
     <div class="recipe-meta">
       <div class="meta-item">
-        <svg width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="var(--accent)" fill="none" stroke-width="2"/><line x1="12" y1="6" x2="12" y2="12" stroke="var(--accent)" stroke-width="2"/><line x1="12" y1="12" x2="16" y2="14" stroke="var(--accent)" stroke-width="2"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" stroke="var(--accent)" fill="none" stroke-width="2"/>
+          <line x1="12" y1="6" x2="12" y2="12" stroke="var(--accent)" stroke-width="2"/>
+          <line x1="12" y1="12" x2="16" y2="14" stroke="var(--accent)" stroke-width="2"/>
+        </svg>
         <span>{{ receta.tiempo }} min</span>
       </div>
       <div class="meta-item">
-        <svg width="20" height="20" viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 17,14 18.5,21 12,17 5.5,21 7,14 2,9 9,9" fill="var(--accent)"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24">
+          <polygon points="12,2 15,9 22,9 17,14 18.5,21 12,17 5.5,21 7,14 2,9 9,9" fill="var(--accent)"/>
+        </svg>
         <span>{{ receta.dificultad }}/10</span>
       </div>
       {% if receta.etiquetas %}
@@ -35,6 +44,7 @@
       <p class="recipe-description">{{ receta.descripcion }}</p>
     {% endif %}
 
+    <!-- Lista de ingredientes -->
     <h2>Ingredientes</h2>
     <ul class="ingredient-list">
       {% for ing in receta.ingredientes.split(',') %}
@@ -42,17 +52,23 @@
       {% endfor %}
     </ul>
 
+    <!-- Proceso de elaboración -->
     <h2>Proceso de elaboración</h2>
     <div class="process">
       <p style="white-space: pre-wrap;">{{ receta.proceso }}</p>
     </div>
 
+    <!-- Botones -->
     <a href="{{ url_for('main.index') }}" class="btn">Volver</a>
     <a href="{{ url_for('main.ver_ingredientes') }}" class="btn">Comprar ingredientes</a>
 
-    <div class="comments-section" style="margin-top: 30px;">
+    <!-- Sección de comentarios -->
+    <div class="comments-section">
       <h2>Comentarios</h2>
-      <button id="btn-add-comment" class="btn btn-sm" type="button">Añadir comentario</button>
+      <button id="btn-add-comment" class="btn btn-sm" 
+        type="button" data-logged="{{ 'true' if current_user else 'false' }}"> 
+        Añadir comentario
+      </button>
       <ul id="comments-list">
         {% for c in receta.comentarios %}
           <li data-id="{{ c.id }}">
@@ -69,22 +85,15 @@
   </div>
 </section>
 
-<div id="comment-modal" class="modal" style="
-     display:none; position:fixed; top:0; left:0; right:0; bottom:0;
-     background:rgba(0,0,0,0.6); align-items:center; justify-content:center; z-index:1000;">
-  <div class="modal-content" style="
-       background:var(--card-bg); padding:20px; border-radius:6px;
-       max-width:400px; width:90%; position:relative;">
-    <span id="modal-close" class="modal-close" style="
-         position:absolute; top:10px; right:12px; font-size:24px; cursor:pointer; color:var(--text);">
-      &times;
-    </span>
-    <h3 style="margin-top:0; color:var(--accent);">Nuevo comentario</h3>
-    <textarea id="comment-text" rows="4" style="
-         width:100%; padding:8px; border:1px solid var(--border);
-         border-radius:4px; background:var(--input-bg); color:var(--text);
-         resize:vertical;" placeholder="Escribe tu comentario..."></textarea>
-    <button id="modal-submit" class="btn" style="margin-top:10px;">Enviar</button>
+<!-- Modal para añadir comentarios -->
+<div id="comment-modal" class="modal">
+  <div class="modal-content">
+    <button id="modal-close" class="modal-close" aria-label="Cerrar">&times;</button>
+    <h3 class="modal-title">Nuevo comentario</h3>
+    <textarea id="comment-text" class="modal-textarea" 
+      rows="4" placeholder="Escribe tu comentario...">
+    </textarea>
+    <button id="modal-submit" class="btn modal-submit">Enviar</button>
   </div>
 </div>
 {% endblock %}
