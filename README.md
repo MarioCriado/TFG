@@ -14,7 +14,7 @@ Recetario es una aplicación web construida con Flask que permite a los usuarios
 1. Clona el repositorio desde GitHub:
 
    ```bash
-   git clone https://github.com/tu_usuario/recetario.git
+   git clone https://github.com/MarioCriado/recetario.git
    cd recetario
    ```
 2. Instala las dependencias:
