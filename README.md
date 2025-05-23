@@ -97,6 +97,6 @@ flask db upgrade   # Aplica migraciones
 * JavaScript Vanilla para la interactividad del cliente.
 * SQLite por defecto (configurable en `config.py`).
 
-## Autor
+## Contacto
 
-* Mario Criado Guerrero — Responsable del proyecto
+* Mario Criado Guerrero - Responsable del proyecto
